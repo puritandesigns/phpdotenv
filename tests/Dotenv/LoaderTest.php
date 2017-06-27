@@ -1,16 +1,16 @@
 <?php
 
-use Dotenv\Loader;
+use Dotenv\Loader\Loader;
 
 class LoaderTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Dotenv\Loader
+     * @var \Dotenv\Loader\Loader
      */
     private $immutableLoader;
 
     /**
-     * @var \Dotenv\Loader
+     * @var \Dotenv\Loader\Loader
      */
     private $mutableLoader;
     

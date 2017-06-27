@@ -1,7 +1,8 @@
 <?php
 
-namespace Dotenv;
+namespace Dotenv\Loader;
 
+use Dotenv\Contract\LoaderInterface;
 use Dotenv\Exception\InvalidFileException;
 use Dotenv\Exception\InvalidPathException;
 
@@ -12,7 +13,7 @@ use Dotenv\Exception\InvalidPathException;
  * - stripping comments beginning with a `#`,
  * - parsing lines that look shell variable setters, e.g `export key = value`, `key="value"`.
  */
-class Loader
+class Loader implements LoaderInterface
 {
     /**
      * The file path.
@@ -33,8 +34,6 @@ class Loader
      *
      * @param string $filePath
      * @param bool   $immutable
-     *
-     * @return void
      */
     public function __construct($filePath, $immutable = false)
     {
@@ -402,5 +401,24 @@ class Loader
         }
 
         unset($_ENV[$name], $_SERVER[$name]);
+    }
+
+    /**
+     * Returns the full path to the file.
+     *
+     * @param string $path
+     * @param string $file
+     *
+     * @return string
+     */
+    static public function getFilePath($path, $file = '.env')
+    {
+        if (is_null($file)) {
+            $file = '.env';
+        }
+
+        $filePath = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file;
+
+        return $filePath;
     }
 }

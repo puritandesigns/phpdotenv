@@ -2,6 +2,8 @@
 
 namespace Dotenv;
 
+use Dotenv\Contract\LoaderInterface;
+
 /**
  * This is the dotenv class.
  *
@@ -20,22 +22,17 @@ class Dotenv
     /**
      * The loader instance.
      *
-     * @var \Dotenv\Loader|null
+     * @var LoaderInterface
      */
     protected $loader;
 
     /**
      * Create a new dotenv instance.
      *
-     * @param string $path
-     * @param string $file
-     *
-     * @return void
+     * @param LoaderInterface $loader
      */
-    public function __construct($path, $file = '.env')
-    {
-        $this->filePath = $this->getFilePath($path, $file);
-        $this->loader = new Loader($this->filePath, true);
+    public function __construct(LoaderInterface $loader) {
+        $this->loader = $loader;
     }
 
     /**
@@ -56,25 +53,6 @@ class Dotenv
     public function overload()
     {
         return $this->loadData(true);
-    }
-
-    /**
-     * Returns the full path to the file.
-     *
-     * @param string $path
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function getFilePath($path, $file)
-    {
-        if (!is_string($file)) {
-            $file = '.env';
-        }
-
-        $filePath = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file;
-
-        return $filePath;
     }
 
     /**
@@ -99,5 +77,14 @@ class Dotenv
     public function required($variable)
     {
         return new Validator((array) $variable, $this->loader);
+    }
+
+    public function checkIncludesAgainstEnv()
+    {
+        if (method_exists($this->loader, 'checkIncludesAgainstEnv')) {
+            return $this->loader->checkIncludesAgainstEnv();
+        }
+
+        return false;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Dotenv;
 
+use Dotenv\Contract\LoaderInterface;
 use Dotenv\Exception\InvalidCallbackException;
 use Dotenv\Exception\ValidationException;
 
@@ -29,12 +30,10 @@ class Validator
     /**
      * Create a new validator instance.
      *
-     * @param array          $variables
-     * @param \Dotenv\Loader $loader
-     *
-     * @return void
+     * @param array           $variables
+     * @param LoaderInterface $loader
      */
-    public function __construct(array $variables, Loader $loader)
+    public function __construct(array $variables, LoaderInterface $loader)
     {
         $this->variables = $variables;
         $this->loader = $loader;
